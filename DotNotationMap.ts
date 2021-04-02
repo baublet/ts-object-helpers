@@ -1,4 +1,5 @@
 import { PathForKey, PrependObjectKeysWith } from "./PrependObjectKeys";
+import { ArrayObjectPropertyTypes } from "./ArrayObjectPropertyTypes";
 
 /**
  * Flattens an object nested up to 5 levels deep into a record of the nested
@@ -22,7 +23,9 @@ import { PathForKey, PrependObjectKeysWith } from "./PrependObjectKeys";
  *   "child": { id: string, children: { id: string, name: string }[] }
  *   "child.id": string,
  *   "child.children": { id: string, name: string }[],
- *   "child.children.$$arrayType": { id: string, name: string }
+ *   "child.children.__arrayType": { id: string, name: string }
+ *   "child.children.__arrayType.id": string,
+ *   "child.children.__arrayType.name": string
  * }
  */
 export type DotNotationMap<T> =
@@ -63,17 +66,8 @@ type D6<T, Path extends string> =
 
 type DFinal<T, Path extends string> = BaseTypesWithPath<T, Path>;
 
-type HandleArrayObjectPropertyTypes<T, Path extends string> = {
-  [K in keyof T]: T[K] extends Array<infer ArrayType>
-    ? { [SameKey in K]: T[SameKey] } &
-        {
-          [InternalKey in PathForKey<"__arrayType", string & K>]: ArrayType;
-        }
-    : { [SameKey in K]: T[SameKey] };
-}[keyof T];
-
 type BaseTypesWithPath<T, Path extends string = ""> = PrependObjectKeysWith<
-  HandleArrayObjectPropertyTypes<T, Path>,
+  ArrayObjectPropertyTypes<T>,
   Path
 >;
 
@@ -100,9 +94,8 @@ type Model = {
   }[];
 };
 
-type DotNotationKeys<T extends object> = keyof DotNotationMap<T>
+export type DotNotationKeys<T extends object> = keyof DotNotationMap<T>;
 
 const test: DotNotationMap<Model> = {
-  "super.deeply.nested.yo": [{ id: "id" }],
-  
+
 };
