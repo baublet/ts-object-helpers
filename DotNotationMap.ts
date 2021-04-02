@@ -1,5 +1,6 @@
 import { PathForKey, PrependObjectKeysWith } from "./PrependObjectKeys";
 import { ArrayObjectPropertyTypes } from "./ArrayObjectPropertyTypes";
+import { UnionToIntersection } from "./UnionToIntersection";
 
 /**
  * Flattens an object nested up to 5 levels deep into a record of the nested
@@ -28,11 +29,15 @@ import { ArrayObjectPropertyTypes } from "./ArrayObjectPropertyTypes";
  *   "child.children.[].name": string
  * }
  */
-export type DotNotationMap<T, BasePath extends string = ""> =
+export type DotNotationMap<
+  T,
+  BasePath extends string = ""
+> = UnionToIntersection<
   | BaseTypesWithPath<T, BasePath>
   | {
       [K in ObjectKeysOf<T>]: D2<T[K], PathForKey<string & K, BasePath>>;
-    }[ObjectKeysOf<T>];
+    }[ObjectKeysOf<T>]
+>;
 
 type D2<T, Path extends string> =
   | BaseTypesWithPath<T, Path>
@@ -116,3 +121,5 @@ const test: DotNotationMap<Model> = {
     },
   ],
 };
+
+const keys: DotNotationKeys<Model> = "1";
