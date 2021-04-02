@@ -23,15 +23,15 @@ import { ArrayObjectPropertyTypes } from "./ArrayObjectPropertyTypes";
  *   "child": { id: string, children: { id: string, name: string }[] }
  *   "child.id": string,
  *   "child.children": { id: string, name: string }[],
- *   "child.children.__arrayType": { id: string, name: string }
- *   "child.children.__arrayType.id": string,
- *   "child.children.__arrayType.name": string
+ *   "child.children.[]": { id: string, name: string }
+ *   "child.children.[].id": string,
+ *   "child.children.[].name": string
  * }
  */
-export type DotNotationMap<T> =
-  | BaseTypesWithPath<T>
+export type DotNotationMap<T, BasePath extends string = ""> =
+  | BaseTypesWithPath<T, BasePath>
   | {
-      [K in ObjectKeysOf<T>]: D2<T[K], string & K>;
+      [K in ObjectKeysOf<T>]: D2<T[K], PathForKey<string & K, BasePath>>;
     }[ObjectKeysOf<T>];
 
 type D2<T, Path extends string> =
@@ -77,6 +77,8 @@ type NonObjectKeysOf<T> = {
 
 type ObjectKeysOf<T> = Exclude<keyof T, NonObjectKeysOf<T>>;
 
+export type DotNotationKeys<T extends object> = keyof DotNotationMap<T>;
+
 type Model = {
   a: {
     hello: string;
@@ -91,11 +93,26 @@ type Model = {
   arrayNode: {
     id: string;
     super: "duper";
+    nestedObject: {
+      hello: string;
+      world: number;
+      stringArray: string[];
+      objectArray: { id: string }[];
+    };
   }[];
 };
 
-export type DotNotationKeys<T extends object> = keyof DotNotationMap<T>;
-
 const test: DotNotationMap<Model> = {
-
+  arrayNode: [
+    {
+      id: "",
+      super: "duper",
+      nestedObject: {
+        hello: "world",
+        world: 42,
+        objectArray: [{ id: "test" }],
+        stringArray: ["wow"],
+      },
+    },
+  ],
 };
