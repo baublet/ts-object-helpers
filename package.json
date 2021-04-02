@@ -1,0 +1,21 @@
+{
+  "name": "ts-object-helpers",
+  "version": "1.0.0",
+  "description": "Useful helpers for working with objects in TypeScript in a type safe manner",
+  "main": "index.js",
+  "repository": "git@github.com:baublet/ts-object-helpers.git",
+  "author": "Ryan Poe <baublet@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "lodash.get": "^4.4.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.22",
+    "esbuild": "^0.11.3",
+    "esbuild-jest": "^0.5.0",
+    "jest": "^26.6.3"
+  }
+}
