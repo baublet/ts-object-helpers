@@ -61,7 +61,7 @@ describe("slots", () => {
             floofer: ["nooter", "scooter"],
           },
         },
-        path: "test.floofer.[]",
+        path: "test.floofer.$",
         slots: [1],
       })
     ).toEqual("scooter");

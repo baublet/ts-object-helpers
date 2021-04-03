@@ -1,5 +1,24 @@
 import { DotNotationMap, DotNotationKeys } from "./DotNotationMap";
 
+type SimpleModel = {
+  id: string;
+  child: {
+    num: number;
+    bool: boolean;
+  };
+};
+
+const simpleKey: DotNotationKeys<SimpleModel> = "child.$";
+const rootLevelTest: Partial<DotNotationMap<SimpleModel>> = {
+  $: {
+    num: 1,
+    bool: true,
+  },
+};
+const rootLevelTest2: Partial<DotNotationMap<SimpleModel>> = {
+  $: "id",
+};
+
 type ComplexModel = {
   a: {
     hello: string;
@@ -37,7 +56,7 @@ const test: DotNotationMap<ComplexModel> = {
     },
   ],
   "a.hello": "a.hello",
-  "arrayNode.[]": {
+  "arrayNode.$": {
     id: "",
     super: "duper",
     nestedObject: {
@@ -47,8 +66,8 @@ const test: DotNotationMap<ComplexModel> = {
       stringArray: ["wow"],
     },
   },
-  "arrayNode.[].id": "id",
-  "arrayNode.[].nestedObject": {
+  "arrayNode.$.id": "id",
+  "arrayNode.$.nestedObject": {
     hello: "world",
     world: 42,
     objectArray: [
@@ -60,14 +79,14 @@ const test: DotNotationMap<ComplexModel> = {
     ],
     stringArray: ["wow"],
   },
-  "arrayNode.[].nestedObject.hello": "world",
-  "arrayNode.[].nestedObject.objectArray": [{ id: "test" }],
-  "arrayNode.[].nestedObject.objectArray.[]": { id: "test" },
-  "arrayNode.[].nestedObject.objectArray.[].id": "id",
-  "arrayNode.[].nestedObject.stringArray": [""],
-  "arrayNode.[].nestedObject.stringArray.[]": "string",
-  "arrayNode.[].nestedObject.world": 42,
-  "arrayNode.[].super": "duper",
+  "arrayNode.$.nestedObject.hello": "world",
+  "arrayNode.$.nestedObject.objectArray": [{ id: "test" }],
+  "arrayNode.$.nestedObject.objectArray.$": { id: "test" },
+  "arrayNode.$.nestedObject.objectArray.$.id": "id",
+  "arrayNode.$.nestedObject.stringArray": [""],
+  "arrayNode.$.nestedObject.stringArray.$": "string",
+  "arrayNode.$.nestedObject.world": 42,
+  "arrayNode.$.super": "duper",
   "super.deeply": {
     nested: {
       yo: [{ id: "" }],
@@ -75,8 +94,8 @@ const test: DotNotationMap<ComplexModel> = {
   },
   "super.deeply.nested": { yo: [{ id: "" }] },
   "super.deeply.nested.yo": [{ id: "" }],
-  "super.deeply.nested.yo.[]": { id: "" },
-  "super.deeply.nested.yo.[].id": "id",
+  "super.deeply.nested.yo.$": { id: "" },
+  "super.deeply.nested.yo.$.id": "id",
   a: { hello: "world" },
   super: {
     deeply: {
@@ -88,7 +107,8 @@ const test: DotNotationMap<ComplexModel> = {
 };
 
 const key: DotNotationKeys<ComplexModel> =
-  "arrayNode.[].nestedObject.stringArray";
+  "arrayNode.$.nestedObject.stringArray";
 const inferredFromMap: DotNotationMap<ComplexModel>[typeof key] = [""];
 // @ts-expect-error
 const invalidInference: DotNotationMap<ComplexModel>[typeof key] = 1;
+const key2: DotNotationKeys<ComplexModel> = "$";
