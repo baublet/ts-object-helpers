@@ -19,7 +19,7 @@ export function get<
 }): Default {
   const pathAsString = args.path as string;
   const pathParts = pathAsString.split(".");
-  const slotCount = pathParts.filter((path) => path === "[]");
+  const slotCount = pathParts.filter((path) => path === "$");
   const slots = args.slots;
 
   if (!slots) {
@@ -38,7 +38,7 @@ export function get<
 
   let slotIndex = 0;
   const pathPartsWithSlotsReplaced = pathParts.map((part) => {
-    if (part !== "[]") {
+    if (part !== "$") {
       return part;
     }
     return slots[slotIndex++];
