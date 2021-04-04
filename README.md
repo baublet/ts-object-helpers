@@ -1,17 +1,17 @@
 # TypeScript Object Access Helpers ![Main Branch Status](https://github.com/baublet/ts-object-helpers/actions/workflows/test-and-build.yml/badge.svg)
 
-Solves the problem of type-safe, deep-object access (or partial access) that is made possible with recent TypeScript versions.
+Solves the problem of type-safe, deep-object access (or partial access) that is made possible with recent TypeScript language features.
 
 - Uses `lodash.get` under the hood (fast, battle-tested, reliable)
 - Adds as much type safety as possible
 - Isomorphic
-- Mandated 100% test coverage
+- 100% test coverage
 
 [@baublet/ts-object-helpers on NPM](https://www.npmjs.com/package/@baublet/ts-object-helpers)
 
 ## Requirements
 
-- TypeScript 4.1+ (uses template literal types _heavily_)
+- TypeScript 4.1+ (requires template literal types)
 
 ## Documentation
 
@@ -90,7 +90,7 @@ type FlatModel = {
 
 #### `VariadicDotNotationMap<T extends object>`
 
-Flattens an object nested up to 5 levels deep into a record of the nested keys in dot notation, with the values preserved.
+Flattens an object nested up to 5 levels deep into a record of the nested keys in dot notation, with the values preserved. Different from `DotNotationMap` because it adds object-level variadic slots to slot unknown types at runtime into without sacrificing type safety.
 
 ```ts
 type Model = {
@@ -122,7 +122,7 @@ type FlatModel = {
 
 #### `NonObjectKeysOf<T extends object>`
 
-Returns the keys of `T` that are primitives.
+Returns the keys of `T` that are primitive types (that is, they're not objects).
 
 #### `ObjectKeysOf<T extends object>`
 
@@ -130,11 +130,11 @@ Returns the keys of `T` that are objects or object-like.
 
 #### `PrependObjectKeysWith<T extends object, Key extends string>`
 
-Creates a new object from `T` with the keys prepended with `Key`. If `Key` is an empty key, this just returns `T`.
+Creates a new object from `T` with the keys prepended with `Key`. If `Key` is an empty string, this returns `T`.
 
 #### `UnionToIntersection<T extends object>`
 
-If `T` is a union of objects, converts `T` to an intersection between all of the objects unioned in `T`.
+If `T` is a union of objects, converts `T` to an intersection between all of the objects unioned in `T`. Credit: [S Stefan Baumgartner](https://fettblog.eu/typescript-union-to-intersection/)
 
 #### `ValuesOf<T extends object>`
 
@@ -207,7 +207,7 @@ const secondDepartmentChair = get(
 ); // type: { id: string, name: string }. Value: { id: "a88p", name: "Hillary King Banks" }
 ```
 
-Limitations
+**Limitations**
 
 - This only works on fully known object types (e.g., where properties of the object are all known at compile time)
 - If values aren't fully known, this may not work properly.
@@ -215,7 +215,7 @@ Limitations
 
 #### `variadicGet`
 
-Variadic get is useful when you have a known object, but need to access properties of the object by some variable property or properties.
+Variadic get is useful when you have a known object, but need to access properties of that object by some property or properties that are not known until runtime.
 
 ```ts
 const person = {
@@ -232,6 +232,6 @@ const nameOrId = urlParams.get("property");
 const personNameOrId = get(person, { path: "$", slots: [nameOrId] }); // type: string. Value: either "a10023b" or "Carlton Banks"
 ```
 
-Limitations:
+**Limitations**
 
-- Variadics won't properly type check on sub-objects of non-array properties. This may be possible, but it creates a huge problem when dealing with objects of any size, as every possible combination of properties on each object and sub-object has to be full mapped out.
+- Variadics won't properly type check on sub-objects of non-array properties. This is probably possible in TypeScript, but it creates a huge problem when dealing with large/deep objects, as every possible combination of properties on each object and sub-object has to be full mapped out. We will probably never support this usecase, as `lodash.get` is a more optimal solution here.
