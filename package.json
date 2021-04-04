@@ -10,7 +10,7 @@
   "author": "Ryan Poe <baublet@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "release": "yarn version && yarn build && yarn coverage && git push && npm publish",
+    "release": "yarn version && yarn build && yarn coverage && git push && echo 'Run `npm publish` to publish this version!",
     "build": "yarn tsc",
     "coverage": "yarn test --collectCoverage=true",
     "test": "jest",
