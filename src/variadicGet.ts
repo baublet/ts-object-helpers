@@ -12,15 +12,16 @@ import {
 export function variadicGet<
   Obj extends object,
   Path extends VariadicDotNotationKeys<Obj>,
-  Default = VariadicDotNotationMap<Obj>[Path]
+  ProvidedDefault extends any = never,
+  ResultType = VariadicDotNotationMap<Obj>[Path] | ProvidedDefault
 >(
   subjectObject: Obj,
   options: {
     path: VariadicDotNotationKeys<Obj>;
     slots?: (string | number)[];
-    defaultValue?: VariadicDotNotationMap<Obj>[Path];
+    defaultValue?: ProvidedDefault;
   }
-): Default {
+): ResultType {
   const pathAsString = options.path as string;
   const pathParts = pathAsString.split(".");
   const slotCount = pathParts.filter((path) => path === "$");
