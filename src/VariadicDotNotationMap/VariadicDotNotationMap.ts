@@ -1,6 +1,10 @@
-import { PathForKey, PrependObjectKeysWith } from "../helperTypes/PrependObjectKeys";
+import {
+  PathForKey,
+  PrependObjectKeysWith,
+} from "../helperTypes/PrependObjectKeys";
 import { ArrayObjectPropertyTypes } from "./ArrayObjectPropertyTypes";
 import { UnionToIntersection } from "../helperTypes/UnionToIntersection";
+import { DeepRequired } from "../helperTypes/DeepRequired";
 
 /**
  * Flattens an object nested up to 5 levels deep into a record of the nested
@@ -33,13 +37,19 @@ import { UnionToIntersection } from "../helperTypes/UnionToIntersection";
  */
 export type VariadicDotNotationMap<
   T,
-  BasePath extends string = ""
-> = UnionToIntersection<
-  | BaseTypesWithPath<T, BasePath>
-  | {
-      [K in ObjectKeysOf<T>]: D2<T[K], PathForKey<string & K, BasePath>>;
-    }[ObjectKeysOf<T>]
->;
+  BasePath extends string = "",
+  DeeplyRequired = DeepRequired<T>
+> = T extends undefined
+  ? never
+  : UnionToIntersection<
+      | BaseTypesWithPath<DeeplyRequired, BasePath>
+      | {
+          [K in ObjectKeysOf<DeeplyRequired>]: D2<
+            DeeplyRequired[K],
+            PathForKey<string & K, BasePath>
+          >;
+        }[ObjectKeysOf<DeeplyRequired>]
+    >;
 
 type D2<T, Path extends string> =
   | BaseTypesWithPath<T, Path>
@@ -86,4 +96,4 @@ type NonObjectKeysOf<T> = {
 type ObjectKeysOf<T> = Exclude<keyof T, NonObjectKeysOf<T>>;
 type ValuesOf<T> = T[keyof T];
 
-export type VariadicDotNotationKeys<T extends object> = keyof VariadicDotNotationMap<T>;
+export type VariadicDotNotationKeys<T> = keyof VariadicDotNotationMap<T>;

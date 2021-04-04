@@ -108,3 +108,20 @@ const key: DotNotationKeys<ComplexModel> =
 const inferredFromMap: DotNotationMap<ComplexModel>[typeof key] = [""];
 // @ts-expect-error
 const invalidInference: DotNotationMap<ComplexModel>[typeof key] = 1;
+
+type PartialModelTest =
+  | undefined
+  | {
+      test: 123;
+      nested: {
+        for?: 123;
+      };
+    };
+
+const partialProperties: DotNotationKeys<PartialModelTest>[] = [
+  "test",
+  "nested.for",
+  "nested",
+  // @ts-expect-error
+  "nope",
+];

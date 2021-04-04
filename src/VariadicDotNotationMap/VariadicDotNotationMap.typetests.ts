@@ -112,3 +112,20 @@ const inferredFromMap: VariadicDotNotationMap<ComplexModel>[typeof key] = [""];
 // @ts-expect-error
 const invalidInference: VariadicDotNotationMap<ComplexModel>[typeof key] = 1;
 const key2: VariadicDotNotationKeys<ComplexModel> = "$";
+
+type PartialModelTest =
+  | undefined
+  | {
+      test: 123;
+      nested: {
+        for?: 123;
+      };
+    };
+
+const partialProperties: VariadicDotNotationKeys<PartialModelTest>[] = [
+  "test",
+  "nested.for",
+  "nested",
+];
+// @ts-expect-error
+const partialPropertyErrorTest: DotNotationKeys<PartialModelTest>[] = ["wrong"];
