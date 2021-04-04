@@ -1,4 +1,4 @@
-# TypeScript Object Access Helpers ![Main Branch Status](https://github.com/github/docs/actions/workflows/test-and-build.yml/badge.svg)
+# TypeScript Object Access Helpers ![Main Branch Status](https://github.com/baublet/ts-object-helpers/actions/workflows/test-and-build.yml/badge.svg)
 
 Helps solve the problem of type-safe, deep-object access (or partial access) that is made possible with recent TypeScript versions.
 
