@@ -43,7 +43,7 @@ type Model = {
   };
 };
 
-type DotNotationKeys = DotNotationMap<Model>;
+type ModelKeys = DotNotationKeys<Model>;
 
 // The above type is equivalent to the below:
 type FlatModelKeys =
