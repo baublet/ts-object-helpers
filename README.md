@@ -1,5 +1,27 @@
 # TypeScript Object Access Helpers ![Main Branch Status](https://github.com/baublet/ts-object-helpers/actions/workflows/test-and-build.yml/badge.svg)
 
+```ts
+import { get } from "@baublet/ts-object-helpers";
+
+const show = {
+  name: "The Fresh Prince",
+  characters: [
+    {
+      name: "Will Smith",
+      parents: [
+        {
+          name: "Vy Smith",
+        },
+      ],
+    },
+  ],
+};
+
+const willsMom = get(show, { path: "characters.parents.$.name", slots: [0] });
+
+console.log(willsMom); // "Vy Smith"
+```
+
 Solves the problem of type-safe, deep-object access (or partial access) that is made possible with recent TypeScript language features.
 
 - Uses `lodash.get` under the hood (fast, battle-tested, reliable)
