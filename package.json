@@ -1,6 +1,6 @@
 {
   "name": "@baublet/ts-object-helpers",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Useful helpers for working with objects and their properties in TypeScript in a type safe manner",
   "main": "build/index.js",
   "repository": {
