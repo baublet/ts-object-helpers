@@ -1,6 +1,6 @@
-import { PathForKey, PrependObjectKeysWith } from "./PrependObjectKeys";
+import { PathForKey, PrependObjectKeysWith } from "../helperTypes/PrependObjectKeys";
 import { ArrayObjectPropertyTypes } from "./ArrayObjectPropertyTypes";
-import { UnionToIntersection } from "./UnionToIntersection";
+import { UnionToIntersection } from "../helperTypes/UnionToIntersection";
 
 /**
  * Flattens an object nested up to 5 levels deep into a record of the nested

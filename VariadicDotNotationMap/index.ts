@@ -1,4 +1,4 @@
 export {
   VariadicDotNotationMap,
   VariadicDotNotationKeys,
-} from "./DotNotationMap";
+} from "./VariadicDotNotationMap";

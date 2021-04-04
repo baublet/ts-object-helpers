@@ -1,5 +1,5 @@
-import { VariadicDotNotationMap } from "./DotNotationMap";
-import { PathForKey } from "./PrependObjectKeys";
+import { VariadicDotNotationMap } from "./VariadicDotNotationMap";
+import { PathForKey } from "../helperTypes/PrependObjectKeys";
 
 export type ArrayObjectPropertyTypes<T> = {
   [K in keyof T]: T[K] extends Array<infer ArrayType>

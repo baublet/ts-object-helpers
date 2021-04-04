@@ -1,4 +1,4 @@
-import { VariadicDotNotationMap, VariadicDotNotationKeys } from "./DotNotationMap";
+import { VariadicDotNotationMap, VariadicDotNotationKeys } from "./VariadicDotNotationMap";
 
 type SimpleModel = {
   id: string;

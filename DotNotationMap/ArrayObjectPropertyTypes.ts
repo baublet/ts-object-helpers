@@ -1,5 +1,5 @@
 import { DotNotationMap } from "./DotNotationMap";
-import { PathForKey } from "./PrependObjectKeys";
+import { PathForKey } from "../helperTypes/PrependObjectKeys";
 
 export type ArrayObjectPropertyTypes<T> = {
   [K in keyof T]: T[K] extends Array<infer ArrayType>
