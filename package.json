@@ -1,9 +1,12 @@
 {
-  "name": "ts-object-helpers",
+  "name": "@baublet/ts-object-helpers",
   "version": "1.0.0",
   "description": "Useful helpers for working with objects and their properties in TypeScript in a type safe manner",
   "main": "build/index.js",
-  "repository": "git@github.com:baublet/ts-object-helpers.git",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/baublet/ts-object-helpers.git"
+  },
   "author": "Ryan Poe <baublet@gmail.com>",
   "license": "MIT",
   "scripts": {
@@ -24,5 +27,14 @@
   },
   "peerDependencies": {
     "typescript": "^4.1"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/baublet/ts-object-helpers/issues"
+  },
+  "homepage": "https://github.com/baublet/ts-object-helpers#readme",
+  "keywords": [
+    "typescript",
+    "object",
+    "get"
+  ]
 }
