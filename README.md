@@ -1,11 +1,13 @@
 # TypeScript Object Access Helpers ![Main Branch Status](https://github.com/baublet/ts-object-helpers/actions/workflows/test-and-build.yml/badge.svg)
 
-Helps solve the problem of type-safe, deep-object access (or partial access) that is made possible with recent TypeScript versions.
+Solves the problem of type-safe, deep-object access (or partial access) that is made possible with recent TypeScript versions.
 
 - Uses `lodash.get` under the hood (fast, battle-tested, reliable)
 - Adds as much type safety as possible
 - Isomorphic
 - Mandated 100% test coverage
+
+[@baublet/ts-object-helpers on NPM](https://www.npmjs.com/package/@baublet/ts-object-helpers)
 
 ## Requirements
 
