@@ -1,9 +1,9 @@
-import { get } from "./get";
+import { variadicGet } from "./variadicGet";
 
 describe("basics", () => {
   it("accesses basic properties", () => {
     expect(
-      get({
+      variadicGet({
         object: {
           test: 123,
         },
@@ -14,7 +14,7 @@ describe("basics", () => {
 
   it("accesses nested properties", () => {
     expect(
-      get({
+      variadicGet({
         object: {
           test: {
             floofer: "nooter",
@@ -27,7 +27,7 @@ describe("basics", () => {
     });
 
     expect(
-      get({
+      variadicGet({
         object: {
           test: {
             floofer: "nooter",
@@ -40,7 +40,7 @@ describe("basics", () => {
 
   it("accesses array properties", () => {
     expect(
-      get({
+      variadicGet({
         object: {
           test: {
             floofer: ["nooter"],
@@ -55,7 +55,7 @@ describe("basics", () => {
 describe("slots", () => {
   it("accesses properties by slots", () => {
     expect(
-      get({
+      variadicGet({
         object: {
           test: {
             floofer: ["nooter", "scooter"],

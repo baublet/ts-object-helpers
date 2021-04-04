@@ -1,4 +1,4 @@
-import { DotNotationMap, DotNotationKeys } from "./DotNotationMap";
+import { VariadicDotNotationMap, VariadicDotNotationKeys } from "./DotNotationMap";
 
 type SimpleModel = {
   id: string;
@@ -8,11 +8,14 @@ type SimpleModel = {
   };
 };
 
-// @ts-expect-error
-const simpleKey: DotNotationKeys<SimpleModel> = "child.$";
-
-const rootLevelTest2: Partial<DotNotationMap<SimpleModel>> = {
-  // @ts-expect-error
+const simpleKey: VariadicDotNotationKeys<SimpleModel> = "child.$";
+const rootLevelTest: Partial<VariadicDotNotationMap<SimpleModel>> = {
+  $: {
+    num: 1,
+    bool: true,
+  },
+};
+const rootLevelTest2: Partial<VariadicDotNotationMap<SimpleModel>> = {
   $: "id",
 };
 
@@ -39,7 +42,7 @@ type ComplexModel = {
   }[];
 };
 
-const test: DotNotationMap<ComplexModel> = {
+const test: VariadicDotNotationMap<ComplexModel> = {
   arrayNode: [
     {
       id: "",
@@ -103,8 +106,9 @@ const test: DotNotationMap<ComplexModel> = {
   },
 };
 
-const key: DotNotationKeys<ComplexModel> =
+const key: VariadicDotNotationKeys<ComplexModel> =
   "arrayNode.$.nestedObject.stringArray";
-const inferredFromMap: DotNotationMap<ComplexModel>[typeof key] = [""];
+const inferredFromMap: VariadicDotNotationMap<ComplexModel>[typeof key] = [""];
 // @ts-expect-error
-const invalidInference: DotNotationMap<ComplexModel>[typeof key] = 1;
+const invalidInference: VariadicDotNotationMap<ComplexModel>[typeof key] = 1;
+const key2: VariadicDotNotationKeys<ComplexModel> = "$";

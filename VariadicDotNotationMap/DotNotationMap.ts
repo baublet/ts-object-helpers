@@ -29,7 +29,7 @@ import { UnionToIntersection } from "./UnionToIntersection";
  *   "child.children.$.name": string
  * }
  */
-export type DotNotationMap<
+export type VariadicDotNotationMap<
   T,
   BasePath extends string = ""
 > = UnionToIntersection<
@@ -71,10 +71,11 @@ type D6<T, Path extends string> =
 
 type DFinal<T, Path extends string> = BaseTypesWithPath<T, Path>;
 
-type BaseTypesWithPath<T, Path extends string = ""> = PrependObjectKeysWith<
-  ArrayObjectPropertyTypes<T>,
-  Path
->;
+type BaseTypesWithPath<T, Path extends string = ""> =
+  | PrependObjectKeysWith<ArrayObjectPropertyTypes<T>, Path>
+  | ValuesOf<
+      { [K in keyof T]: PrependObjectKeysWith<{ $: ValuesOf<T> }, Path> }
+    >;
 
 type NonObjectKeysOf<T> = {
   [K in keyof T]: T[K] extends Array<any> ? K : T[K] extends object ? never : K;
@@ -83,4 +84,4 @@ type NonObjectKeysOf<T> = {
 type ObjectKeysOf<T> = Exclude<keyof T, NonObjectKeysOf<T>>;
 type ValuesOf<T> = T[keyof T];
 
-export type DotNotationKeys<T extends object> = keyof DotNotationMap<T>;
+export type VariadicDotNotationKeys<T extends object> = keyof VariadicDotNotationMap<T>;

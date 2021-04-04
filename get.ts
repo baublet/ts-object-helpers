@@ -1,11 +1,9 @@
-import lodashGet from "lodash.get";
-
 import { DotNotationKeys, DotNotationMap } from "./DotNotationMap";
+import { variadicGet } from "./variadicGet";
 
 /**
- * A type safe wrapper around lodash.get
- * @param args
- * @returns
+ * A type safe wrapper around lodash.get that's as type safe as we can make it
+ * when using variadic accessors, rather than known string literals.
  */
 export function get<
   Obj extends object,
@@ -17,36 +15,8 @@ export function get<
   slots?: (string | number)[];
   defaultValue?: DotNotationMap<Obj>[Path];
 }): Default {
-  const pathAsString = args.path as string;
-  const pathParts = pathAsString.split(".");
-  const slotCount = pathParts.filter((path) => path === "$");
-  const slots = args.slots;
-
-  if (!slots) {
-    return lodashGet(args.object, pathAsString, args.defaultValue);
-  }
-
-  if (slotCount.length !== slots.length) {
-    throw new Error(
-      `Slots passed doesn't match the slots in the accessor! Path: ${args.path}. Slots: ${args.slots}`
-    );
-  }
-
-  if (slotCount.length === 0) {
-    return lodashGet(args.object, pathAsString, args.defaultValue);
-  }
-
-  let slotIndex = 0;
-  const pathPartsWithSlotsReplaced = pathParts.map((part) => {
-    if (part !== "$") {
-      return part;
-    }
-    return slots[slotIndex++];
-  });
-
-  return lodashGet(
-    args.object,
-    pathPartsWithSlotsReplaced.join("."),
-    args.defaultValue
-  );
+  // Casting here to prevent possibly-infinite instantiation issues. We don't
+  // care to infer at this point, since we're type complete at the exposed ends
+  // of this function, anyway.
+  return variadicGet(args as any);
 }
