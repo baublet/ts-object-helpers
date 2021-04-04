@@ -5,12 +5,23 @@ Helps solve the problem of type-safe, deep-object access (or partial access) tha
 - Uses `lodash.get` under the hood (fast, battle-tested, reliable)
 - Adds as much type safety as possible
 - Isomorphic
+- Mandated 100% test coverage
 
 ## Requirements
 
 - TypeScript 4.1+ (uses template literal types _heavily_)
 
 ## Documentation
+
+### Installation
+
+```bash
+# npm
+$ npm i --save @baublet/ts-object-helpers
+
+# yarn
+$ yarn add @baublet/ts-object-helpers
+```
 
 ### Type Helpers
 
