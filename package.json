@@ -1,6 +1,6 @@
 {
   "name": "@baublet/ts-object-helpers",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Useful helpers for working with objects and their properties in TypeScript in a type safe manner",
   "main": "build/index.js",
   "repository": {
@@ -10,7 +10,7 @@
   "author": "Ryan Poe <baublet@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "release": "yarn version && yarn build && yarn coverage && git push && echo 'Run `npm publish` to publish this version!",
+    "release": "yarn version && yarn build && yarn coverage && git push && echo 'Run `npm publish` to publish this version!'",
     "build": "yarn tsc",
     "coverage": "yarn test --collectCoverage=true",
     "test": "jest",
