@@ -19,7 +19,7 @@ import { UnionToIntersection } from "../helperTypes/UnionToIntersection";
  *
  * This helper converts that type to:
  *
- * type FlatModel {
+ * type FlatModel = {
  *   "$": string | typeof child,
  *   "id": string,
  *   "child": { id: string, children: { id: string, name: string }[] },

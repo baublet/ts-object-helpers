@@ -3,51 +3,59 @@ import { variadicGet } from "./variadicGet";
 describe("basics", () => {
   it("accesses basic properties", () => {
     expect(
-      variadicGet({
-        object: {
+      variadicGet(
+        {
           test: 123,
         },
-        path: "test",
-      })
+        {
+          path: "test",
+        }
+      )
     ).toEqual(123);
   });
 
   it("accesses nested properties", () => {
     expect(
-      variadicGet({
-        object: {
+      variadicGet(
+        {
           test: {
             floofer: "nooter",
           },
         },
-        path: "test",
-      })
+        {
+          path: "test",
+        }
+      )
     ).toEqual({
       floofer: "nooter",
     });
 
     expect(
-      variadicGet({
-        object: {
+      variadicGet(
+        {
           test: {
             floofer: "nooter",
           },
         },
-        path: "test.floofer",
-      })
+        {
+          path: "test.floofer",
+        }
+      )
     ).toEqual("nooter");
   });
 
   it("accesses array properties", () => {
     expect(
-      variadicGet({
-        object: {
+      variadicGet(
+        {
           test: {
             floofer: ["nooter"],
           },
         },
-        path: "test.floofer",
-      })
+        {
+          path: "test.floofer",
+        }
+      )
     ).toEqual(["nooter"]);
   });
 });
@@ -55,15 +63,17 @@ describe("basics", () => {
 describe("slots", () => {
   it("accesses properties by slots", () => {
     expect(
-      variadicGet({
-        object: {
+      variadicGet(
+        {
           test: {
             floofer: ["nooter", "scooter"],
           },
         },
-        path: "test.floofer.$",
-        slots: [1],
-      })
+        {
+          path: "test.floofer.$",
+          slots: [1],
+        }
+      )
     ).toEqual("scooter");
   });
 });

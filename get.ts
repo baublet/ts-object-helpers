@@ -9,14 +9,16 @@ export function get<
   Obj extends object,
   Path extends DotNotationKeys<Obj>,
   Default = DotNotationMap<Obj>[Path]
->(args: {
-  object: Obj;
-  path: DotNotationKeys<Obj>;
-  slots?: (string | number)[];
-  defaultValue?: DotNotationMap<Obj>[Path];
-}): Default {
+>(
+  subjectObject: Obj,
+  options: {
+    path: DotNotationKeys<Obj>;
+    slots?: (string | number)[];
+    defaultValue?: DotNotationMap<Obj>[Path];
+  }
+): Default {
   // Casting here to prevent possibly-infinite instantiation issues. We don't
   // care to infer at this point, since we're type complete at the exposed ends
   // of this function, anyway.
-  return variadicGet(args as any);
+  return variadicGet(subjectObject, options as any);
 }

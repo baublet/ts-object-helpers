@@ -19,7 +19,7 @@ import { UnionToIntersection } from "../helperTypes/UnionToIntersection";
  *
  * This helper converts that type to:
  *
- * type FlatModel {
+ * type FlatModel = {
  *   "id": string,
  *   "child": { id: string, children: { id: string, name: string }[] }
  *   "child.id": string,
@@ -81,6 +81,5 @@ type NonObjectKeysOf<T> = {
 }[keyof T];
 
 type ObjectKeysOf<T> = Exclude<keyof T, NonObjectKeysOf<T>>;
-type ValuesOf<T> = T[keyof T];
 
 export type DotNotationKeys<T extends object> = keyof DotNotationMap<T>;

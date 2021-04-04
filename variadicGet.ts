@@ -13,29 +13,31 @@ export function variadicGet<
   Obj extends object,
   Path extends VariadicDotNotationKeys<Obj>,
   Default = VariadicDotNotationMap<Obj>[Path]
->(args: {
-  object: Obj;
-  path: VariadicDotNotationKeys<Obj>;
-  slots?: (string | number)[];
-  defaultValue?: VariadicDotNotationMap<Obj>[Path];
-}): Default {
-  const pathAsString = args.path as string;
+>(
+  subjectObject: Obj,
+  options: {
+    path: VariadicDotNotationKeys<Obj>;
+    slots?: (string | number)[];
+    defaultValue?: VariadicDotNotationMap<Obj>[Path];
+  }
+): Default {
+  const pathAsString = options.path as string;
   const pathParts = pathAsString.split(".");
   const slotCount = pathParts.filter((path) => path === "$");
-  const slots = args.slots;
+  const slots = options.slots;
 
   if (!slots) {
-    return lodashGet(args.object, pathAsString, args.defaultValue);
+    return lodashGet(subjectObject, pathAsString, options.defaultValue);
   }
 
   if (slotCount.length !== slots.length) {
     throw new Error(
-      `Slots passed doesn't match the slots in the accessor! Path: ${args.path}. Slots: ${args.slots}`
+      `Slots passed doesn't match the slots in the accessor! Path: ${options.path}. Slots: ${options.slots}`
     );
   }
 
   if (slotCount.length === 0) {
-    return lodashGet(args.object, pathAsString, args.defaultValue);
+    return lodashGet(subjectObject, pathAsString, options.defaultValue);
   }
 
   let slotIndex = 0;
@@ -47,8 +49,8 @@ export function variadicGet<
   });
 
   return lodashGet(
-    args.object,
+    subjectObject,
     pathPartsWithSlotsReplaced.join("."),
-    args.defaultValue
+    options.defaultValue
   );
 }
