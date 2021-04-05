@@ -1,5 +1,6 @@
+import lodashGet from "lodash.get";
+
 import { DotNotationKeys, DotNotationMap } from "./DotNotationMap";
-import { variadicGet } from "./variadicGet";
 
 /**
  * A type safe wrapper around lodash.get that's as type safe as we can make it
@@ -12,14 +13,43 @@ export function get<
   ResultType = DotNotationMap<Obj>[Path] | ProvidedDefault
 >(
   subjectObject: Obj,
-  options: {
-    path: DotNotationKeys<Obj>;
-    slots?: (string | number)[];
-  },
+  optionsOrPath:
+    | string
+    | {
+        path: DotNotationKeys<Obj>;
+        slots?: (string | number)[];
+      },
   defaultValue?: ProvidedDefault
 ): ResultType {
-  // Casting here to prevent possibly-infinite instantiation issues. We don't
-  // care to infer from this point, since we're type complete at the exposed
-  // boundaries of this function, anyway.
-  return variadicGet(subjectObject, options as any, defaultValue);
+  const pathAsString = (typeof optionsOrPath === "string"
+    ? optionsOrPath
+    : optionsOrPath.path) as string;
+  const pathParts = pathAsString.split(".");
+  const slotCount = pathParts.filter((path) => path === "$");
+  const slots =
+    typeof optionsOrPath === "string" ? [] : optionsOrPath.slots || [];
+
+  if (slotCount.length !== slots.length) {
+    throw new Error(
+      `Slots passed doesn't match the slots in the accessor! Path: ${pathAsString}. Slots: ${slots}`
+    );
+  }
+
+  if (slotCount.length === 0) {
+    return lodashGet(subjectObject, pathAsString, defaultValue);
+  }
+
+  let slotIndex = 0;
+  const pathPartsWithSlotsReplaced = pathParts.map((part) => {
+    if (part !== "$") {
+      return part;
+    }
+    return slots[slotIndex++];
+  });
+
+  return lodashGet(
+    subjectObject,
+    pathPartsWithSlotsReplaced.join("."),
+    defaultValue
+  );
 }

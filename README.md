@@ -114,38 +114,6 @@ type FlatModel = {
 };
 ```
 
-#### `VariadicDotNotationMap<T extends object>`
-
-Flattens an object nested up to 5 levels deep into a record of the nested keys in dot notation, with the values preserved. Different from `DotNotationMap` because it adds object-level variadic slots to slot unknown types at runtime into without sacrificing type safety.
-
-```ts
-type Model = {
-  id: string,
-  child: {
-    id: string,
-    children: {
-     id: string,
-     name: string
-    }[]
-  }
-}
-
-type DotNotatedModel = VariadicDotNotationMap<Model>;
-
-// FlattenedModel is equivalent to the below
-type FlatModel = {
-  "$": string | typeof Model.child,
-  "id": string,
-  "child": { id: string, children: { id: string, name: string }[] },
-  "child.$": string | typeof Model.child[0].children,
-  "child.id": string,
-  "child.children": { id: string, name: string }[],
-  "child.children.$": { id: string, name: string }
-  "child.children.$.id": string,
-  "child.children.$.name": string
-}
-```
-
 #### `NonObjectKeysOf<T extends object>`
 
 Returns the keys of `T` that are primitive types (that is, they're not objects).
@@ -252,43 +220,8 @@ const secondDepartmentChair = get(
 **Limitations**
 
 - This only works on fully known object types (e.g., where properties of the object are all known at compile time)
-- If values aren't fully known, this may not work properly.
-- You can't use variables for accessing properties. If you want this functionality, we have basic support in `variadicGet`. For more complex examples, type safety cannot guaranteed at compile time. Use `lodash.get` and runtime checks for these scenarios.
+- If values aren't fully known at compile time, this may not work properly.
+- If the accessors aren't fully known at compile time, this may not work properly.
+- You can't use variables for accessing properties. If you want this functionality, we have basic support in `variadicGet`.
 
-#### `variadicGet`
-
-Variadic get is useful when you have a known object, but need to access properties of that object by some property or properties that are not known until runtime.
-
-```ts
-function variadicGet(
-  subjectObject: object,
-  optionsOrPath:
-    | string
-    | {
-        path: string;
-        slots?: (string | number)[];
-      },
-  defaultValue?: any
-): ProvidedDefault | object[path];
-```
-
-**Example**
-
-```ts
-const person = {
-  id: "a10023b",
-  name: "Carlton Banks",
-  dean: {
-    id: "p93i",
-    name: "Ashley Banks",
-  },
-};
-
-const nameOrId = req.params.property;
-
-const personNameOrId = get(person, { path: "$", slots: [nameOrId] }); // type: string. Value: undefined, "a10023b", or "Carlton Banks"
-```
-
-**Limitations**
-
-- Variadics won't properly type check on sub-objects of non-array properties. This is probably possible in TypeScript, but it creates a huge problem when dealing with large/deep objects. Every possible combination of properties on nested object has to be slottable, making the number of potential string combinations excessively large. We will probably never support this use case, as `lodash.get` is a more optimal solution here.
+For more complex examples, type safety cannot guaranteed at compile time. Use `lodash.get` and runtime checks for these scenarios.
