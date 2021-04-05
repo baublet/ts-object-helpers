@@ -30,7 +30,7 @@ console.log(willsMom); // "Vy Smith"
 
 - Uses `lodash.get` under the hood (fast, battle-tested, reliable)
 - Adds as much type safety as possible
-- Isomorphic
+- Isomorphic (works both in the browser and in node)
 - 100% test coverage
 
 [@baublet/ts-object-helpers on NPM](https://www.npmjs.com/package/@baublet/ts-object-helpers)
@@ -284,7 +284,7 @@ const person = {
   },
 };
 
-const nameOrId = urlParams.get("property");
+const nameOrId = req.params.property;
 
 const personNameOrId = get(person, { path: "$", slots: [nameOrId] }); // type: string. Value: undefined, "a10023b", or "Carlton Banks"
 ```

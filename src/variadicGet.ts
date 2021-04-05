@@ -32,10 +32,6 @@ export function variadicGet<
   const slots =
     typeof optionsOrPath === "string" ? [] : optionsOrPath.slots || [];
 
-  if (!slots) {
-    return lodashGet(subjectObject, pathAsString, defaultValue);
-  }
-
   if (slotCount.length !== slots.length) {
     throw new Error(
       `Slots passed doesn't match the slots in the accessor! Path: ${pathAsString}. Slots: ${slots}`
