@@ -1,13 +1,8 @@
 // Code
-export { variadicGet } from "./src/variadicGet";
 export { get } from "./src/get";
 
 // Main types from this library
 export { DotNotationKeys, DotNotationMap } from "./src/DotNotationMap";
-export {
-  VariadicDotNotationKeys,
-  VariadicDotNotationMap,
-} from "./src/VariadicDotNotationMap";
 export { NestedPropertyTypeOf } from "./src/NestedPropertyTypeOf";
 
 // Small, useful types

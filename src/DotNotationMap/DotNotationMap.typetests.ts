@@ -8,11 +8,14 @@ type SimpleModel = {
   };
 };
 
-// @ts-expect-error
 const simpleKey: DotNotationKeys<SimpleModel> = "child.$";
-
+const rootLevelTest: Partial<DotNotationMap<SimpleModel>> = {
+  $: {
+    num: 1,
+    bool: true,
+  },
+};
 const rootLevelTest2: Partial<DotNotationMap<SimpleModel>> = {
-  // @ts-expect-error
   $: "id",
 };
 
@@ -108,6 +111,7 @@ const key: DotNotationKeys<ComplexModel> =
 const inferredFromMap: DotNotationMap<ComplexModel>[typeof key] = [""];
 // @ts-expect-error
 const invalidInference: DotNotationMap<ComplexModel>[typeof key] = 1;
+const key2: DotNotationKeys<ComplexModel> = "$";
 
 type PartialModelTest =
   | undefined
@@ -122,6 +126,6 @@ const partialProperties: DotNotationKeys<PartialModelTest>[] = [
   "test",
   "nested.for",
   "nested",
-  // @ts-expect-error
-  "nope",
 ];
+// @ts-expect-error
+const partialPropertyErrorTest: DotNotationKeys<PartialModelTest>[] = ["wrong"];
