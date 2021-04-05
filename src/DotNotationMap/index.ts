@@ -1,1 +1,1 @@
-export { DotNotationKeys, DotNotationMap } from "./DotNotationMap";
+export { DotNotationMap, DotNotationKeys } from "./DotNotationMap";

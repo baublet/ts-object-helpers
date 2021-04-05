@@ -1,4 +1,4 @@
-import { variadicGet } from "./variadicGet";
+import { get } from "./get";
 
 const fixtureData = {
   name: "Mulan",
@@ -29,7 +29,7 @@ const fixtureData = {
   ],
 };
 
-const maybeFiersteinOrNumeric = variadicGet(
+const maybeFiersteinOrNumeric = get(
   fixtureData,
   {
     path: "characters.$.name",

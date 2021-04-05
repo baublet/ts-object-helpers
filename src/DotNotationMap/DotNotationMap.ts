@@ -24,8 +24,10 @@ import { DeepRequired } from "../helperTypes/DeepRequired";
  * This helper converts that type to:
  *
  * type FlatModel = {
+ *   "$": string | typeof child,
  *   "id": string,
- *   "child": { id: string, children: { id: string, name: string }[] }
+ *   "child": { id: string, children: { id: string, name: string }[] },
+ *   "child.$": string | typeof children,
  *   "child.id": string,
  *   "child.children": { id: string, name: string }[],
  *   "child.children.$": { id: string, name: string }
@@ -81,15 +83,17 @@ type D6<T, Path extends string> =
 
 type DFinal<T, Path extends string> = BaseTypesWithPath<T, Path>;
 
-type BaseTypesWithPath<T, Path extends string = ""> = PrependObjectKeysWith<
-  ArrayObjectPropertyTypes<T>,
-  Path
->;
+type BaseTypesWithPath<T, Path extends string = ""> =
+  | PrependObjectKeysWith<ArrayObjectPropertyTypes<T>, Path>
+  | ValuesOf<
+      { [K in keyof T]: PrependObjectKeysWith<{ $: ValuesOf<T> }, Path> }
+    >;
 
 type NonObjectKeysOf<T> = {
   [K in keyof T]: T[K] extends Array<any> ? K : T[K] extends object ? never : K;
 }[keyof T];
 
 type ObjectKeysOf<T> = Exclude<keyof T, NonObjectKeysOf<T>>;
+type ValuesOf<T> = T[keyof T];
 
 export type DotNotationKeys<T> = keyof DotNotationMap<T>;
