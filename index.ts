@@ -8,6 +8,7 @@ export {
   VariadicDotNotationKeys,
   VariadicDotNotationMap,
 } from "./src/VariadicDotNotationMap";
+export { NestedPropertyTypeOf } from "./src/NestedPropertyTypeOf";
 
 // Small, useful types
 export { NonObjectKeysOf } from "./src/helperTypes/NonObjectKeysOf";

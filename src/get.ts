@@ -8,17 +8,18 @@ import { variadicGet } from "./variadicGet";
 export function get<
   Obj extends object,
   Path extends DotNotationKeys<Obj>,
-  Default = DotNotationMap<Obj>[Path]
+  ProvidedDefault extends any,
+  ResultType = DotNotationMap<Obj>[Path] | ProvidedDefault
 >(
   subjectObject: Obj,
   options: {
     path: DotNotationKeys<Obj>;
     slots?: (string | number)[];
-    defaultValue?: DotNotationMap<Obj>[Path];
-  }
-): Default {
+  },
+  defaultValue?: ProvidedDefault
+): ResultType {
   // Casting here to prevent possibly-infinite instantiation issues. We don't
-  // care to infer at this point, since we're type complete at the exposed ends
-  // of this function, anyway.
-  return variadicGet(subjectObject, options as any);
+  // care to infer from this point, since we're type complete at the exposed
+  // boundaries of this function, anyway.
+  return variadicGet(subjectObject, options as any, defaultValue);
 }

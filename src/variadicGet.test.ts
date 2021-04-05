@@ -7,9 +7,8 @@ describe("basics", () => {
         {
           test: 123,
         },
-        {
-          path: "test",
-        }
+        "test",
+        321
       )
     ).toEqual(123);
   });
@@ -24,7 +23,8 @@ describe("basics", () => {
         },
         {
           path: "test",
-        }
+        },
+        "lighter"
       )
     ).toEqual({
       floofer: "nooter",
@@ -39,7 +39,8 @@ describe("basics", () => {
         },
         {
           path: "test.floofer",
-        }
+        },
+        1
       )
     ).toEqual("nooter");
   });
@@ -52,9 +53,8 @@ describe("basics", () => {
             floofer: ["nooter"],
           },
         },
-        {
-          path: "test.floofer",
-        }
+        "test.floofer",
+        "stooper"
       )
     ).toEqual(["nooter"]);
   });
@@ -72,7 +72,8 @@ describe("slots", () => {
         {
           path: "test.floofer.$",
           slots: [1],
-        }
+        },
+        "scuttle"
       )
     ).toEqual("scooter");
   });
@@ -85,10 +86,14 @@ it("throws if the slots don't align", () => {
     },
   };
   expect(() => {
-    variadicGet(obj, {
-      path: "test.$",
-      slots: [],
-    });
+    variadicGet(
+      obj,
+      {
+        path: "test.$",
+        slots: [],
+      },
+      "default"
+    );
   }).toThrow();
 });
 
@@ -99,9 +104,13 @@ it("doesn't throw if slots are truthy, but they didn't pass a path that needs th
     },
   };
   expect(() => {
-    variadicGet(obj, {
-      path: "test",
-      slots: [],
-    });
+    variadicGet(
+      obj,
+      {
+        path: "test",
+        slots: [],
+      },
+      "default"
+    );
   }).not.toThrow();
 });

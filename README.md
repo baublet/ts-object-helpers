@@ -1,5 +1,7 @@
 # TypeScript Object Access Helpers ![Main Branch Status](https://github.com/baublet/ts-object-helpers/actions/workflows/test-and-build.yml/badge.svg)
 
+Solves the problem of type-safe, deep-object access (or partial access) that is made possible with recent TypeScript language features.
+
 ```ts
 import { get } from "@baublet/ts-object-helpers";
 
@@ -17,16 +19,18 @@ const show = {
   ],
 };
 
-const willsMom = get(show, { path: "characters.parents.$.name", slots: [0] });
+const willsMom = get(
+  show,
+  { path: "characters.parents.$.name", slots: [0] },
+  "Aunt Viv"
+);
 
 console.log(willsMom); // "Vy Smith"
 ```
 
-Solves the problem of type-safe, deep-object access (or partial access) that is made possible with recent TypeScript language features.
-
 - Uses `lodash.get` under the hood (fast, battle-tested, reliable)
 - Adds as much type safety as possible
-- Isomorphic
+- Isomorphic (works both in the browser and in node)
 - 100% test coverage
 
 [@baublet/ts-object-helpers on NPM](https://www.npmjs.com/package/@baublet/ts-object-helpers)
@@ -178,7 +182,22 @@ const values: Values[] = ["id", { test: 123 }];
 
 #### `get`
 
-Type-safe accessor function for objects with **known keys and values**.
+Type-safe accessor function for objects with **known keys and values**. Similar API to `lodash.get`.
+
+```ts
+function get(
+  subjectObject: object,
+  optionsOrPath:
+    | string
+    | {
+        path: string;
+        slots?: (string | number)[];
+      },
+  defaultValue?: any
+): ProvidedDefault | object[path];
+```
+
+**Example**
 
 ```ts
 const person = {
@@ -210,8 +229,9 @@ const person = {
 
 const deanName = get(
   person,
-  { path: "dean.name" }
-); // type: string. Value: Ashley Banks
+  "dean.name".
+  "n/a"
+); // type: string | "n/a". Value: Ashley Banks
 
 const firstDepartmentName = get(
   person,
@@ -226,7 +246,7 @@ const secondDepartmentName = get(
 const secondDepartmentChair = get(
   person,
   { path: "department.$.chair"), slots: [1] }
-); // type: { id: string, name: string }. Value: { id: "a88p", name: "Hillary King Banks" }
+); // type: undefined | { id: string, name: string }. Value: { id: "a88p", name: "Hillary King Banks" }
 ```
 
 **Limitations**
@@ -240,6 +260,21 @@ const secondDepartmentChair = get(
 Variadic get is useful when you have a known object, but need to access properties of that object by some property or properties that are not known until runtime.
 
 ```ts
+function variadicGet(
+  subjectObject: object,
+  optionsOrPath:
+    | string
+    | {
+        path: string;
+        slots?: (string | number)[];
+      },
+  defaultValue?: any
+): ProvidedDefault | object[path];
+```
+
+**Example**
+
+```ts
 const person = {
   id: "a10023b",
   name: "Carlton Banks",
@@ -249,11 +284,11 @@ const person = {
   },
 };
 
-const nameOrId = urlParams.get("property");
+const nameOrId = req.params.property;
 
-const personNameOrId = get(person, { path: "$", slots: [nameOrId] }); // type: string. Value: either "a10023b" or "Carlton Banks"
+const personNameOrId = get(person, { path: "$", slots: [nameOrId] }); // type: string. Value: undefined, "a10023b", or "Carlton Banks"
 ```
 
 **Limitations**
 
-- Variadics won't properly type check on sub-objects of non-array properties. This is probably possible in TypeScript, but it creates a huge problem when dealing with large/deep objects, as every possible combination of properties on each object and sub-object has to be full mapped out. We will probably never support this usecase, as `lodash.get` is a more optimal solution here.
+- Variadics won't properly type check on sub-objects of non-array properties. This is probably possible in TypeScript, but it creates a huge problem when dealing with large/deep objects. Every possible combination of properties on nested object has to be slottable, making the number of potential string combinations excessively large. We will probably never support this use case, as `lodash.get` is a more optimal solution here.

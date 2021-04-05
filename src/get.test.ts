@@ -6,7 +6,8 @@ it("returns the right value from a known object type", () => {
       {
         id: "id",
       },
-      { path: "id" }
+      { path: "id" },
+      "defaultId"
     )
   ).toEqual("id");
 });
