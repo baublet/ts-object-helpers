@@ -14,20 +14,20 @@ export function get<
 >(
   subjectObject: Obj,
   optionsOrPath:
-    | string
+    | DotNotationKeys<Obj>
     | {
         path: DotNotationKeys<Obj>;
         slots?: (string | number)[];
       },
   defaultValue?: ProvidedDefault
 ): ResultType {
-  const pathAsString = (typeof optionsOrPath === "string"
-    ? optionsOrPath
-    : optionsOrPath.path) as string;
+  const pathAsString = (typeof optionsOrPath === "object"
+    ? optionsOrPath.path
+    : optionsOrPath) as string;
   const pathParts = pathAsString.split(".");
   const slotCount = pathParts.filter((path) => path === "$");
   const slots =
-    typeof optionsOrPath === "string" ? [] : optionsOrPath.slots || [];
+    typeof optionsOrPath === "object" ? optionsOrPath.slots || [] : [];
 
   if (slotCount.length !== slots.length) {
     throw new Error(
