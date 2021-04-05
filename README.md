@@ -53,6 +53,25 @@ $ yarn add @baublet/ts-object-helpers
 
 ### Type Helpers
 
+#### `NestedPropertyTypeOf<T extends object, DotNotationKeyOf<T>>`
+
+Takes an object with a known set of keys and values, and some dot-notation property of that objects, and creates a type that represents the value of the accessed property.
+
+```ts
+type Model = {
+  id: string;
+  child: {
+    id: string;
+    children: {
+      id: string;
+      name: string;
+    }[];
+  };
+};
+
+type ChildNameType = NestedPropertyTypeOf<Model, "id.child.children.$.name">; // string
+```
+
 #### `DotNotationKeys<T extends object>`
 
 Takes an object with a known set of keys and recursively returns all possible dot notation accessors for the known type.
