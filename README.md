@@ -222,6 +222,5 @@ const secondDepartmentChair = get(
 - This only works on fully known object types (e.g., where properties of the object are all known at compile time)
 - If values aren't fully known at compile time, this may not work properly.
 - If the accessors aren't fully known at compile time, this may not work properly.
-- You can't use variables for accessing properties. If you want this functionality, we have basic support in `variadicGet`.
 
 For more complex examples, type safety cannot guaranteed at compile time. Use `lodash.get` and runtime checks for these scenarios.
