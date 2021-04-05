@@ -29,10 +29,16 @@ const fixtureData = {
   ],
 };
 
-const fiersteinOrBust = variadicGet(fixtureData, {
-  path: "characters.$.name",
-  slots: [2],
-  defaultValue: 1,
-});
+const maybeFiersteinOrNumeric = variadicGet(
+  fixtureData,
+  {
+    path: "characters.$.name",
+    slots: [2],
+  },
+  1
+);
 
-const fiersteinOrBustValue: typeof fiersteinOrBust = "Harvey Fierstein";
+const possibleValues: typeof maybeFiersteinOrNumeric[] = [
+  "Harvey Fierstein",
+  1,
+];
