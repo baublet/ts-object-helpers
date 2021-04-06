@@ -42,3 +42,37 @@ const possibleValues: typeof maybeFiersteinOrNumeric[] = [
   "Harvey Fierstein",
   1,
 ];
+
+type DeepPartial =
+  | undefined
+  | {
+      logs?: {
+        phase0: string;
+        userDefined?: string[];
+      };
+    };
+
+const deepPartial: DeepPartial = {
+  logs: {
+    phase0: "test",
+  },
+};
+
+const result = get(deepPartial, "logs");
+type ResultType = typeof result;
+// @ts-expect-error
+const resultShouldFail: ResultType = "fail";
+const resultShouldFail2: ResultType = {
+  phase0: "123",
+  // @ts-expect-error
+  userDefined: ["123", 123],
+};
+const resultShouldSucceed: ResultType = undefined;
+const resultShouldSucceed2: ResultType = {
+  phase0: "test",
+  userDefined: ["test 123", "test 321"],
+};
+const resultShouldSucceed3: ResultType = {
+  phase0: "test",
+  userDefined: []
+};

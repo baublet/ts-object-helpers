@@ -2,9 +2,10 @@ import {
   PathForKey,
   PrependObjectKeysWith,
 } from "../helperTypes/PrependObjectKeys";
-import { ArrayObjectPropertyTypes } from "./ArrayObjectPropertyTypes";
 import { UnionToIntersection } from "../helperTypes/UnionToIntersection";
-import { DeepRequired } from "../helperTypes/DeepRequired";
+import { PartialKeysToRequiredOrUndefined } from "../helperTypes/PartialKeysToRequiredOrUndefined";
+import { ObjectKeysOf } from "../helperTypes/ObjectKeysOf";
+import { ValuesOf } from "../helperTypes/ValuesOf";
 
 /**
  * Flattens an object nested up to 5 levels deep into a record of the nested
@@ -30,70 +31,101 @@ import { DeepRequired } from "../helperTypes/DeepRequired";
  *   "child.$": string | typeof children,
  *   "child.id": string,
  *   "child.children": { id: string, name: string }[],
- *   "child.children.$": { id: string, name: string }
+ *   "child.children.$": { id: string, name: string },
  *   "child.children.$.id": string,
- *   "child.children.$.name": string
+ *   "child.children.$.name": string,
  * }
  */
 export type DotNotationMap<
-  T,
+  T extends {},
   BasePath extends string = "",
-  DeeplyRequired = DeepRequired<T>
-> = T extends undefined
-  ? never
-  : UnionToIntersection<
-      | BaseTypesWithPath<DeeplyRequired, BasePath>
-      | {
-          [K in ObjectKeysOf<DeeplyRequired>]: D2<
-            DeeplyRequired[K],
-            PathForKey<string & K, BasePath>
-          >;
-        }[ObjectKeysOf<DeeplyRequired>]
-    >;
-
-type D2<T, Path extends string> =
-  | BaseTypesWithPath<T, Path>
+  TransformedObject extends {} = PartialKeysToRequiredOrUndefined<T>
+> = UnionToIntersection<
+  | BaseTypesWithPath<TransformedObject, BasePath>
   | {
-      [K in ObjectKeysOf<T>]: D3<T[K], PathForKey<string & K, Path>>;
-    }[ObjectKeysOf<T>];
+      [K in ObjectKeysOf<TransformedObject>]: D0<
+        TransformedObject[K],
+        PathForKey<string & K, BasePath>
+      >;
+    }[ObjectKeysOf<TransformedObject>]
+>;
 
-type D3<T, Path extends string> =
-  | BaseTypesWithPath<T, Path>
+type D0<
+  T extends {},
+  BasePath extends string = "",
+  TransformedObject extends {} = PartialKeysToRequiredOrUndefined<T>
+> = UnionToIntersection<
+  | BaseTypesWithPath<TransformedObject, BasePath>
   | {
-      [K in ObjectKeysOf<T>]: D4<T[K], PathForKey<string & K, Path>>;
-    }[ObjectKeysOf<T>];
+      [K in ObjectKeysOf<TransformedObject>]: D1<
+        TransformedObject[K],
+        PathForKey<string & K, BasePath>
+      >;
+    }[ObjectKeysOf<TransformedObject>]
+>;
 
-type D4<T, Path extends string> =
-  | BaseTypesWithPath<T, Path>
+type D1<
+  T extends {},
+  BasePath extends string = "",
+  TransformedObject extends {} = PartialKeysToRequiredOrUndefined<T>
+> = UnionToIntersection<
+  | BaseTypesWithPath<TransformedObject, BasePath>
   | {
-      [K in ObjectKeysOf<T>]: D5<T[K], PathForKey<string & K, Path>>;
-    }[ObjectKeysOf<T>];
+      [K in ObjectKeysOf<TransformedObject>]: D2<
+        TransformedObject[K],
+        PathForKey<string & K, BasePath>
+      >;
+    }[ObjectKeysOf<TransformedObject>]
+>;
 
-type D5<T, Path extends string> =
-  | BaseTypesWithPath<T, Path>
+type D2<
+  T extends {},
+  BasePath extends string = "",
+  TransformedObject extends {} = PartialKeysToRequiredOrUndefined<T>
+> = UnionToIntersection<
+  | BaseTypesWithPath<TransformedObject, BasePath>
   | {
-      [K in ObjectKeysOf<T>]: D6<T[K], PathForKey<string & K, Path>>;
-    }[ObjectKeysOf<T>];
+      [K in ObjectKeysOf<TransformedObject>]: D3<
+        TransformedObject[K],
+        PathForKey<string & K, BasePath>
+      >;
+    }[ObjectKeysOf<TransformedObject>]
+>;
 
-type D6<T, Path extends string> =
-  | BaseTypesWithPath<T, Path>
+type D3<
+  T extends {},
+  BasePath extends string = "",
+  TransformedObject extends {} = PartialKeysToRequiredOrUndefined<T>
+> =
+  | BaseTypesWithPath<TransformedObject, BasePath>
   | {
-      [K in ObjectKeysOf<T>]: DFinal<T[K], PathForKey<string & K, Path>>;
-    }[ObjectKeysOf<T>];
+      [K in ObjectKeysOf<TransformedObject>]: DFinal<
+        TransformedObject[K],
+        PathForKey<string & K, BasePath>
+      >;
+    }[ObjectKeysOf<TransformedObject>];
 
-type DFinal<T, Path extends string> = BaseTypesWithPath<T, Path>;
+type DFinal<
+  T extends {},
+  BasePath extends string = "",
+  TransformedObject extends {} = PartialKeysToRequiredOrUndefined<T>
+> = BaseTypesWithPath<TransformedObject, BasePath>;
 
-type BaseTypesWithPath<T, Path extends string = ""> =
-  | PrependObjectKeysWith<ArrayObjectPropertyTypes<T>, Path>
-  | ValuesOf<
-      { [K in keyof T]: PrependObjectKeysWith<{ $: ValuesOf<T> }, Path> }
-    >;
+type BaseTypesWithPath<T, Path extends string = ""> = T extends Array<
+  infer ArrayType
+>
+  ? PrependObjectKeysWith<
+      { $: BaseTypesWithPath<ArrayType, PathForKey<"$", Path>> },
+      Path
+    > 
+  : T extends {}
+  ?
+      | PrependObjectKeysWith<T, Path>
+      | ValuesOf<
+          {
+            [K in keyof T]: PrependObjectKeysWith<{ $: ValuesOf<T> }, Path>;
+          }
+        >
+  : T;
 
-type NonObjectKeysOf<T> = {
-  [K in keyof T]: T[K] extends Array<any> ? K : T[K] extends object ? never : K;
-}[keyof T];
-
-type ObjectKeysOf<T> = Exclude<keyof T, NonObjectKeysOf<T>>;
-type ValuesOf<T> = T[keyof T];
-
-export type DotNotationKeys<T> = keyof DotNotationMap<T>;
+export type DotNotationKeys<T extends object> = keyof DotNotationMap<T>;

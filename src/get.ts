@@ -1,26 +1,26 @@
 import lodashGet from "lodash.get";
 
 import { DotNotationKeys, DotNotationMap } from "./DotNotationMap";
+import { DeepRequired } from "./helperTypes/DeepRequired";
 
 /**
  * A type safe wrapper around lodash.get that's as type safe as we can make it
  * when using variadic accessors, rather than known string literals.
  */
 export function get<
-  Obj extends object,
-  Path extends DotNotationKeys<Obj>,
-  ProvidedDefault extends any,
-  ResultType = DotNotationMap<Obj>[Path] | ProvidedDefault
+  SubjectObject extends object,
+  Path extends keyof DotNotationMap<SubjectObject>,
+  ProvidedDefault extends any = undefined
 >(
-  subjectObject: Obj,
+  subjectObject: SubjectObject,
   optionsOrPath:
-    | DotNotationKeys<Obj>
+    | Path
     | {
-        path: DotNotationKeys<Obj>;
+        path: Path;
         slots?: (string | number)[];
       },
   defaultValue?: ProvidedDefault
-): ResultType {
+): DotNotationMap<SubjectObject>[Path] | ProvidedDefault {
   const pathAsString = (typeof optionsOrPath === "object"
     ? optionsOrPath.path
     : optionsOrPath) as string;

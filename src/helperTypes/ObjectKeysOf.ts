@@ -1,3 +1,3 @@
 import { NonObjectKeysOf } from "./NonObjectKeysOf";
 
-export type ObjectKeysOf<T> = Exclude<keyof T, NonObjectKeysOf<T>>;
+export type ObjectKeysOf<T> = Exclude<keyof T, NonObjectKeysOf<T> | undefined>;
