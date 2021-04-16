@@ -1,1 +1,0 @@
-export { NestedPropertyTypeOf } from "./NestedPropertyTypeOf";

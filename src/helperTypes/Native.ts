@@ -8,3 +8,5 @@ export type Primitive =
   | null;
 
 export type Builtin = Primitive | Function | Date | Error | RegExp;
+
+export type NonNativeType = Exclude<any, Primitive | Builtin>;

@@ -1,7 +1,7 @@
 import lodashGet from "lodash.get";
 
-import { DotNotationKeys, DotNotationMap } from "./DotNotationMap";
-import { DeepRequired } from "./helperTypes/DeepRequired";
+import { Paths } from "./helperTypes/Paths";
+import { PathToType } from "./helperTypes/PathToType";
 
 /**
  * A type safe wrapper around lodash.get that's as type safe as we can make it
@@ -9,25 +9,20 @@ import { DeepRequired } from "./helperTypes/DeepRequired";
  */
 export function get<
   SubjectObject extends object,
-  Path extends keyof DotNotationMap<SubjectObject>,
+  Path extends Paths<SubjectObject>,
   ProvidedDefault extends any = undefined
 >(
   subjectObject: SubjectObject,
-  optionsOrPath:
-    | Path
-    | {
-        path: Path;
-        slots?: (string | number)[];
-      },
+  optionsOrPath: Path | GetOptions<Path>,
   defaultValue?: ProvidedDefault
-): DotNotationMap<SubjectObject>[Path] | ProvidedDefault {
+): PathToType<SubjectObject, Path> {
   const pathAsString = (typeof optionsOrPath === "object"
-    ? optionsOrPath.path
+    ? (optionsOrPath as any).path
     : optionsOrPath) as string;
   const pathParts = pathAsString.split(".");
   const slotCount = pathParts.filter((path) => path === "$");
   const slots =
-    typeof optionsOrPath === "object" ? optionsOrPath.slots || [] : [];
+    typeof optionsOrPath === "object" ? (optionsOrPath as any).slots || [] : [];
 
   if (slotCount.length !== slots.length) {
     throw new Error(
@@ -53,3 +48,8 @@ export function get<
     defaultValue
   );
 }
+
+type GetOptions<Path extends string> = {
+  path: Path;
+  slots?: (string | number)[];
+};

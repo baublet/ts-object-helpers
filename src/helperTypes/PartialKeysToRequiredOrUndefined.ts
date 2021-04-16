@@ -1,16 +1,23 @@
-export type PartialKeysToRequiredOrUndefined<T> = ReplacePlaceholderLiterals<
-  RecursivePartialKeysToRequiredOrUndefined<T>
+import { Depth } from "./Depth";
+
+export type PartialKeysToRequiredOrUndefined<
+  T,
+  MaximumDepth extends number = 5
+> = ReplacePlaceholderLiterals<
+  RecursivePartialKeysToRequiredOrUndefined<T, MaximumDepth>
 >;
 
-type RecursivePartialKeysToRequiredOrUndefined<T> = T extends Array<
-  infer ArrayType
->
-  ? RecursivePartialKeysToRequiredOrUndefined<ArrayType>[]
+type RecursivePartialKeysToRequiredOrUndefined<T, D extends number = 5> = [
+  D
+] extends [never]
+  ? T
+  : T extends Array<infer ArrayType>
+  ? RecursivePartialKeysToRequiredOrUndefined<ArrayType, Depth[D]>[]
   : T extends {}
   ? {
       [K in keyof T]-?: K extends PartialKeys<T>
-        ? Maybe<RecursivePartialKeysToRequiredOrUndefined<T[K]>>
-        : RecursivePartialKeysToRequiredOrUndefined<T[K]>;
+        ? Maybe<RecursivePartialKeysToRequiredOrUndefined<T[K], Depth[D]>>
+        : RecursivePartialKeysToRequiredOrUndefined<T[K], Depth[D]>;
     }
   : T;
 
